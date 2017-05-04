@@ -30,7 +30,7 @@
         <MyLibPath>C:\Librerias\Build\libs</MyLibPath>
 
         <!-- Directorio de salida del codigo generado. -->
-        <OutputPath>output</OutputPath>
+        <OutputPath>$(CurrentDir)\output</OutputPath>
 
         <OSG_VER>3.4.0</OSG_VER>
         <OSGNET_VER>3.4.0-beta</OSGNET_VER>
@@ -275,7 +275,6 @@
 
     </ItemGroup>
 
-    <!-- Import Project="..\..\Config.proj" / -->
     <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
 
     <Target Name="Test">
@@ -353,7 +352,7 @@
         <!-- Compile + Link -->
         <MSBuild Projects ="$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_$(Platform)_wrap.vcxproj"
                  Properties="Configuration=$(Configuration);Platform=$(Platform)"
-                 Targets="Build" />
+                 Targets="Clean;Build" />
 
 
         <!-- <MSBuild Projects ="Build-Template.vcxproj"
@@ -415,21 +414,6 @@
                  Targets="Build" />
     </Target>
 
-    <Target Name="NuGetDependencies">
-        <!--
-        <Message Text="****************" />
-        <Message Text="***** gdal *****" />
-        <Message Text="****************" />
-
-        <Exec WorkingDirectory="$(GDAL_NUGET_PATH)"
-              Command="nmake /F mymakefile.vc preparar OUTPUT_BASE=$(ExeOutputPath)\$(Configuration)\"/>
-
-        <Exec WorkingDirectory="$(GDAL_NUGET_PATH)"
-              Command="nmake /f mymakefile.vc preparar WIN64=YES OUTPUT_BASE=$(ExeOutputPath)\$(Configuration)\"/> -->
-
-
-    </Target>
-
     <Target Name="NuGet_osg">
         <Message Text="********************************" />
         <Message Text="***** NuGet OpenSceneGraph *****" />
@@ -452,13 +436,19 @@
 
         <Delete Files="@(DeleteFile_osg)" />
 
-        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\tools"/>
+        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x64;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x86;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\lib\net40-client;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\tools"/>
 
         <Copy SourceFiles="@(CopyFile_osg)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(osg)\%(CopyFile_osg.RecursiveDir)" />
 
+        <TemplateFile Template="templates\nuget\nuget.props.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\$(NuGetName).props"
+                      Tokens="@(Tokens_osgnet)" />
+        <TemplateFile Template="templates\nuget\nuget.targets.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\$(NuGetName).targets"
+                      Tokens="@(Tokens_osgnet)" />
         <TemplateFile Template="templates\nuget\$(osg).nuspec.template"
                       OutputFilename="$(ExeOutputPath)\$(Configuration)\$(osg).nuspec"
                       Tokens="@(Tokens_osg)" />
@@ -490,18 +480,18 @@
 
         <Delete Files="@(DeleteFile_osgearth)" />
 
-        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\tools"/>
+        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x64;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x86;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\lib\net40-client;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\tools"/>
 
         <Copy SourceFiles="@(CopyFile_osgearth)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\%(CopyFile_osgearth.RecursiveDir)" />
 
         <TemplateFile Template="templates\nuget\nuget.props.template"
-                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.props"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\$(NuGetName).props"
                       Tokens="@(Tokens_osgnet)" />
         <TemplateFile Template="templates\nuget\nuget.targets.template"
-                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.targets"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\$(NuGetName).targets"
                       Tokens="@(Tokens_osgnet)" />
         <TemplateFile Template="templates\nuget\$(NuGetName).nuspec.template"
                       OutputFilename="$(ExeOutputPath)\$(Configuration)\$(NuGetName).nuspec"
@@ -524,22 +514,22 @@
             <CopyFile_x64 Include="$(ExeOutputPath)\$(Configuration)\x64\*_wrap.dll" />
             <CopyFile_csharp Include="$(ExeOutputPath)\$(Configuration)\anycpu\*_csharp.dll" />
 
-            <Tokens_osgnet Include="NUGET_NAME"><ReplacementValue>${NuGetName}</ReplacementValue></Tokens_osgnet>
+            <Tokens_osgnet Include="NUGET_NAME"><ReplacementValue>$(NuGetName)</ReplacementValue></Tokens_osgnet>
             <Tokens_osgnet Include="VERSION"><ReplacementValue>$(NUGET_OSGNET_VER)</ReplacementValue></Tokens_osgnet>
             <Tokens_osgnet Include="OSG_VER"><ReplacementValue>$(NUGET_OSG_VER)</ReplacementValue></Tokens_osgnet>
             <Tokens_osgnet Include="OSGEARTH_VER"><ReplacementValue>$(NUGET_OSGEARTH_VER)</ReplacementValue></Tokens_osgnet>
             <Tokens_osgnet Include="GDAL_VER"><ReplacementValue>$(NUGET_GDAL_VER)</ReplacementValue></Tokens_osgnet>
         </ItemGroup>
 
-        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client;
-                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\tools"/>
+        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x64;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x86;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\lib\net40-client;
+                              $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\tools"/>
 
-        <Copy SourceFiles="@(NuGetCopyFile)"   DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\%(NuGetCopyFile.RecursiveDir)" />
-        <Copy SourceFiles="@(CopyFile_x86)"    DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86" />
-        <Copy SourceFiles="@(CopyFile_x64)"    DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64" />
-        <Copy SourceFiles="@(CopyFile_csharp)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client" />
+        <Copy SourceFiles="@(NuGetCopyFile)"   DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\%(NuGetCopyFile.RecursiveDir)" />
+        <Copy SourceFiles="@(CopyFile_x86)"    DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x86" />
+        <Copy SourceFiles="@(CopyFile_x64)"    DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\x64" />
+        <Copy SourceFiles="@(CopyFile_csharp)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\lib\net40-client" />
 
         <Message Text="-------------------------------------------------------------" />
         <Message Text="NuGetCopyFile:   @(NuGetCopyFile)" />
@@ -549,16 +539,16 @@
         <Message Text="-------------------------------------------------------------" />
 
         <TemplateFile Template="templates\nuget\nuget.props.template"
-                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.props"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\$(NuGetName).props"
                       Tokens="@(Tokens_osgnet)" />
         <TemplateFile Template="templates\nuget\nuget.targets.template"
-                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.targets"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\$(NuGetName).targets"
                       Tokens="@(Tokens_osgnet)" />
-        <TemplateFile Template="templates\nuget\${NuGetName}.nuspec.template"
-                      OutputFilename="$(ExeOutputPath)\$(Configuration)\${NuGetName}.nuspec"
+        <TemplateFile Template="templates\nuget\$(NuGetName).nuspec.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\$(NuGetName).nuspec"
                       Tokens="@(Tokens_osgnet)" />
 
-        <Exec Command="$(NuGetBase)\nuget.exe pack $(ExeOutputPath)\$(Configuration)\${NuGetName}.nuspec -BasePath $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName} -OutputDirectory $(ExeOutputPath)\$(Configuration)\"/>
+        <Exec Command="$(NuGetBase)\nuget.exe pack $(ExeOutputPath)\$(Configuration)\$(NuGetName).nuspec -BasePath $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName) -OutputDirectory $(ExeOutputPath)\$(Configuration)\"/>
     </Target>
 
     <Target Name="ImpSwig">
@@ -689,10 +679,16 @@
 %3C/ItemGroup%3E
                 </ReplacementValue>
             </Tokens>
+            <Tokens Include="ExeOutputPath">
+                <ReplacementValue>$(ExeOutputPath)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="SourcePath">
+                <ReplacementValue></ReplacementValue>
+            </Tokens>
         </ItemGroup>
 
         <!-- Se ejecuta la plantilla. -->
-        <TemplateFile Template="Build-Template-2.vcxproj"
+        <TemplateFile Template="templates\Build-Template-2.vcxproj.template"
                       OutputFilename="$(_OutputVcxproj)"
                       Tokens="@(Tokens)" />
     </Target>
@@ -766,10 +762,13 @@
 %3C/ItemGroup%3E
                 </ReplacementValue>
             </Tokens>
+            <Tokens Include="ExeOutputPath">
+                <ReplacementValue>$(ExeOutputPath)</ReplacementValue>
+            </Tokens>
         </ItemGroup>
 
         <!-- Se ejecuta la plantilla. -->
-        <TemplateFile Template="Build-Template-2.csproj"
+        <TemplateFile Template="templates\Build-Template-2.csproj.template"
                       OutputFilename="$(_OutputCsproj)"
                       Tokens="@(Tokens)" />
     </Target>
@@ -780,6 +779,21 @@
                               $(ExeOutputPath)\test\lib\net40-client;
                               $(ExeOutputPath)\test\tools"/>
     </Target>
+
+    <!-- <Target Name="NuGetDependencies">
+        <!- -
+        <Message Text="****************" />
+        <Message Text="***** gdal *****" />
+        <Message Text="****************" />
+
+        <Exec WorkingDirectory="$(GDAL_NUGET_PATH)"
+              Command="nmake /F mymakefile.vc preparar OUTPUT_BASE=$(ExeOutputPath)\$(Configuration)\"/>
+
+        <Exec WorkingDirectory="$(GDAL_NUGET_PATH)"
+              Command="nmake /f mymakefile.vc preparar WIN64=YES OUTPUT_BASE=$(ExeOutputPath)\$(Configuration)\"/> - ->
+
+
+    </Target> -->
 
     <!-- <Target Name="Build">
         <PropertyGroup>

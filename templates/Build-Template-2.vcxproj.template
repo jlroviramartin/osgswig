@@ -1,7 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
-  <Import Project="..\..\..\..\..\..\Config.proj" />
+  <PropertyGroup>
+    <ExeOutputPath>${ExeOutputPath}</ExeOutputPath>
+    <MyIncludePath>${MyIncludePath}</MyIncludePath>
+    <MyExecutablePath>${MyExecutablePath}</MyExecutablePath>
+    <MyLibraryPath>${MyLibraryPath}</MyLibraryPath>
+    <SourcePath>${SourcePath}</SourcePath>
+    <Lib>${Lib}</Lib>
+    <ProjectName>${ProjectName}</ProjectName>
+  </PropertyGroup>
 
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -25,7 +33,7 @@
   <PropertyGroup Label="Globals">
     <ProjectGuid>{32F2EBE5-2A5B-4F01-A007-0CE3F610A5FD}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <RootNamespace>${ProjectName}</RootNamespace>
+    <RootNamespace>$(ProjectName)</RootNamespace>
   </PropertyGroup>
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -42,6 +50,7 @@
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
+
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
 
   <ImportGroup Label="ExtensionSettings">
@@ -56,15 +65,16 @@
 
   <PropertyGroup>
     <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
-    <OutDir>$(ExeOutputPath)\$(Configuration)\$(Platform)\${ProjectName}\</OutDir>
+    <OutDir>$(ExeOutputPath)\$(Configuration)\$(Platform)\$(ProjectName)\</OutDir>
     <IntDir>$(OutDir)Int\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <GenerateManifest>true</GenerateManifest>
-    <IncludePath>${MyIncludePath};$(IncludePath)</IncludePath>
-    <ExecutablePath>${MyExecutablePath};$(ExecutablePath)</ExecutablePath>
-    <LibraryPath>${MyLibraryPath};$(LibraryPath)</LibraryPath>
+    <IncludePath>$(MyIncludePath);$(IncludePath)</IncludePath>
+    <ExecutablePath>$(MyExecutablePath);$(ExecutablePath)</ExecutablePath>
+    <LibraryPath>$(MyLibraryPath);$(LibraryPath)</LibraryPath>
     <SourcePath>$(SourcePath)</SourcePath>
   </PropertyGroup>
+
   <PropertyGroup Condition="'$(Configuration)'=='Debug'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
@@ -82,13 +92,13 @@
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>${Lib};%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)${ProjectName}$(TargetExt)</OutputFile>
+      <AdditionalDependencies>$(Lib);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>$(OutDir)${ProjectName}.pdb</ProgramDatabaseFile>
-      <ImportLibrary>$(OutDir)${ProjectName}.lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(OutDir)$(ProjectName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)'=='Release'">
@@ -102,15 +112,15 @@
       <AdditionalOptions Condition="'$(Platform)'=='x64'">/bigobj %(AdditionalOptions)</AdditionalOptions>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>${Lib};%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(OutDir)${ProjectName}$(TargetExt)</OutputFile>
+      <AdditionalDependencies>$(Lib);%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>$(OutDir)$(ProjectName)$(TargetExt)</OutputFile>
       <AdditionalLibraryDirectories>$(OutDir);%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <ProgramDatabaseFile>$(OutDir)${ProjectName}.pdb</ProgramDatabaseFile>
-      <ImportLibrary>$(OutDir)${ProjectName}.lib</ImportLibrary>
+      <ProgramDatabaseFile>$(OutDir)$(ProjectName).pdb</ProgramDatabaseFile>
+      <ImportLibrary>$(OutDir)$(ProjectName).lib</ImportLibrary>
     </Link>
   </ItemDefinitionGroup>
 
@@ -126,11 +136,14 @@ ${XmlInclude}
 
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
 
+  <!-- <Target Name="BeforeBuild">
+  </Target> -->
+
   <Target Name="AfterBuild">
     <ItemGroup>
-      <copyToOutput Include="$(OutDir)${ProjectName}.dll" />
-      <copyToOutput Include="$(OutDir)${ProjectName}.pdb" />
-      <copyToOutput Include="$(OutDir)${ProjectName}.lib" />
+      <copyToOutput Include="$(OutDir)$(ProjectName).dll" />
+      <copyToOutput Include="$(OutDir)$(ProjectName).pdb" />
+      <copyToOutput Include="$(OutDir)$(ProjectName).lib" />
     </ItemGroup>
 
     <Message Text="**********************************************" />
@@ -141,8 +154,6 @@ ${XmlInclude}
     <Copy SourceFiles="@(copyToOutput)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\$(Platform)\" SkipUnchangedFiles="false" ContinueOnError="false" />
   </Target>
 
-  <!--<Target Name="AfterBuild">
-  </Target>-->
   <!-- <ImportGroup Label="ExtensionTargets">
   </ImportGroup> -->
 </Project>

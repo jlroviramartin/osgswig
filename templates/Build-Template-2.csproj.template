@@ -1,12 +1,15 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
 
-  <Import Project="..\..\..\..\..\..\Config.proj" />
-
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' " />
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " />
+
+  <PropertyGroup>
+    <ExeOutputPath>${ExeOutputPath}</ExeOutputPath>
+    <ProjectName>${ProjectName}</ProjectName>
+  </PropertyGroup>
 
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -16,7 +19,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Tool</RootNamespace>
-    <AssemblyName>${ProjectName}</AssemblyName>
+    <AssemblyName>$(ProjectName)</AssemblyName>
     <OutputPath>$(ExeOutputPath)\$(Configuration)\$(Platform)</OutputPath>
     <!-- <BaseIntermediateOutputPath>$(ExeOutputPath)\Int\$(Platform)\$(AssemblyName)\</BaseIntermediateOutputPath> -->
     <IntermediateOutputPath>$(ExeOutputPath)\Int\$(AssemblyName)\$(Configuration)\$(Platform)\</IntermediateOutputPath>
@@ -33,6 +36,13 @@
     <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
+
+  <PropertyGroup>
+    <WarningLevel>4</WarningLevel>
+    <WarningsAsErrors>108,114,251</WarningsAsErrors>
+    <NoWarn>0419,1570,1572,1573,1574,1580,1584,1587,1591,1658</NoWarn>
+  </PropertyGroup>
+
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -48,7 +58,10 @@
 
 ${XmlInclude}
 
-  <Import Project="$(CommonTargets)" Condition="Exists('$(CommonTargets)')" />
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" Condition=" '$(MSBuildToolsPath)' != '' " />
+
+  <!-- Deprecado apartir de la version 3.5. -->
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" Condition=" '$(MSBuildToolsPath)' == '' " />
 
   <!-- <Target Name="BeforeBuild">
   </Target> -->
