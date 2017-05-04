@@ -1,0 +1,12 @@
+swig\globals.i(245) : Warning 453: Can't apply (char &INOUT). No typemaps are defined.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingBox(82) : Warning 503: Can't wrap 'operator ==' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingBox(83) : Warning 503: Can't wrap 'operator !=' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingSphere(66) : Warning 503: Can't wrap 'operator ==' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingSphere(67) : Warning 503: Can't wrap 'operator !=' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingBox(82) : Warning 503: Can't wrap 'operator ==' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingBox(83) : Warning 503: Can't wrap 'operator !=' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingSphere(66) : Warning 503: Can't wrap 'operator ==' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\BoundingSphere(67) : Warning 503: Can't wrap 'operator !=' unless renamed to a valid identifier.
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\Texture1D(89) : Warning 517: Director class 'osg::Texture1D::SubloadCallback' can't be constructed
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\Texture2D(88) : Warning 517: Director class 'osg::Texture2D::SubloadCallback' can't be constructed
+C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osg\CoordinateSystemNode(73) : Warning 503: Can't wrap 'operator ==' unless renamed to a valid identifier.

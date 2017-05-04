@@ -1,0 +1,69 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+
+  <Import Project="..\..\..\..\..\..\Config.proj" />
+
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|Win32' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|Win32' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x64' " />
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x64' " />
+
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">Win32</Platform>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{2EEF0419-821C-4F39-AE92-25489468F7EA}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Tool</RootNamespace>
+    <AssemblyName>${ProjectName}</AssemblyName>
+    <OutputPath>$(ExeOutputPath)\$(Configuration)\$(Platform)</OutputPath>
+    <!-- <BaseIntermediateOutputPath>$(ExeOutputPath)\Int\$(Platform)\$(AssemblyName)\</BaseIntermediateOutputPath> -->
+    <IntermediateOutputPath>$(ExeOutputPath)\Int\$(AssemblyName)\$(Configuration)\$(Platform)\</IntermediateOutputPath>
+    <DocumentationFile>$(OutputPath)\$(AssemblyName).xml</DocumentationFile>
+    <ErrorReport>prompt</ErrorReport>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <StartupObject />
+    <FileUpgradeFlags />
+    <UpgradeBackupLocation />
+    <ApplicationRevision>0</ApplicationRevision>
+    <RegisterForComInterop>false</RegisterForComInterop>
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <DefineConstants>$(DefineGlobalConstants);TRACE;DEBUG;CONTRACTS_FULL;PINTAR_OGL;OPENTK</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <DefineConstants>$(DefineGlobalConstants);TRACE;PINTAR_OGL;OPENTK</DefineConstants>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+  </PropertyGroup>
+
+${XmlInclude}
+
+  <Import Project="$(CommonTargets)" Condition="Exists('$(CommonTargets)')" />
+
+  <!-- <Target Name="BeforeBuild">
+  </Target> -->
+
+  <Target Name="AfterBuild">
+    <ItemGroup>
+      <copyToOutput Include="$(OutDir)$(TargetFileName)" />
+      <copyToOutput Include="$(OutDir)$(TargetName).pdb" />
+    </ItemGroup>
+
+    <Message Text="**********************************************" />
+    <Message Text="Copiando = @(copyToOutput)" />
+    <Message Text="Destino  = $(ExeOutputPath)\$(Configuration)\$(Platform)\" />
+
+    <RemoveDir Directories="obj" />
+    <Copy SourceFiles="@(copyToOutput)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\$(Platform)\" SkipUnchangedFiles="false" ContinueOnError="false" />
+  </Target>
+</Project>

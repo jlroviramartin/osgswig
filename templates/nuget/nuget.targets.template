@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+    <PropertyGroup>
+        <BuildDependsOn>
+            $(BuildDependsOn);
+            ${NUGET_NAME}AfterBuild
+        </BuildDependsOn>
+    </PropertyGroup>
+
+    <Target Name="${NUGET_NAME}AfterBuild">
+        <ItemGroup>
+            <copyToOutput Include="$(MSBuildThisFileDirectory)native\**\*.*" />
+        </ItemGroup>
+
+        <Message Text="Iniciando ${NUGET_NAME}Build para ${NUGET_NAME}" />
+        <Message Text="Contenido : @(copyToOutput)" />
+
+        <Copy ContinueOnError="true" SourceFiles="@(copyToOutput)" DestinationFolder="$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" />
+    </Target>
+</Project>

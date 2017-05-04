@@ -1,0 +1,997 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+    <PropertyGroup>
+        <!-- MSBuild community tasks -->
+        <MSBuildCommunityTasksPath>C:\Librerias\msbuild\MSBuild.Community.Tasks</MSBuildCommunityTasksPath>
+
+        <!-- MSBuild extension pack -->
+        <ExtensionTasksPath>C:\Librerias\msbuild\MSBuild.Extension.Pack</ExtensionTasksPath>
+
+        <!-- Directorio de salida del codigo generado. -->
+        <ExeOutputPath>C:\Exes\openscenegraph</ExeOutputPath>
+
+        <Configuration>Release</Configuration>
+        <Platform>Win32</Platform>
+
+        <Win3264 Condition=" '$(Platform)' == 'Win32' OR '$(Platform)' == 'x86' ">win32</Win3264>
+        <Win3264 Condition=" '$(Platform)' == 'Win64' OR '$(Platform)' == 'x64' ">win64</Win3264>
+        <X8664 Condition=" '$(Platform)' == 'Win32' OR '$(Platform)' == 'x86' ">x86</X8664>
+        <X8664 Condition=" '$(Platform)' == 'Win64' OR '$(Platform)' == 'x64' ">x64</X8664>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <CurrentDir>$(MSBuildProjectDirectory)</CurrentDir>
+        <SelfFile>swig_osg-3.4_osgEarth-trunk.proj</SelfFile>
+
+        <SwigBase>C:\Aplicaciones\Desarrollo\swigwin\3.0.12</SwigBase>
+        <NuGetBase>C:\Aplicaciones\Desarrollo\nuget-3.2.0</NuGetBase>
+
+        <MyLibPath>C:\Librerias\Build\libs</MyLibPath>
+
+        <!-- Directorio de salida del codigo generado. -->
+        <OutputPath>output</OutputPath>
+
+        <OSG_VER>3.4.0</OSG_VER>
+        <OSGNET_VER>3.4.0-beta</OSGNET_VER>
+        <OSGEARTH_VER>2.8-trunk</OSGEARTH_VER>
+
+        <!-- NuGet -->
+        <NUGET_GDAL_VER>1.11.2.5</NUGET_GDAL_VER>
+        <NUGET_OSG_VER>3.4.0.12</NUGET_OSG_VER>
+        <NUGET_OSGNET_VER>3.4.0.12-beta</NUGET_OSGNET_VER>
+        <NUGET_OSGEARTH_VER>2.8.12-beta</NUGET_OSGEARTH_VER>
+
+        <GDAL_NUGET_PATH>C:\Librerias\Build\gdal-1.11.2\</GDAL_NUGET_PATH>
+        <OPENSCENEGRAPH_NUGET_PATH>C:\Librerias\Build\OpenSceneGraph-$(OSG_VER)\</OPENSCENEGRAPH_NUGET_PATH>
+        <OSGEARTH_NUGET_PATH>C:\Librerias\Build\osgearth-$(OSGEARTH_VER)\</OSGEARTH_NUGET_PATH>
+
+        <!-- OpenSceneGraph -->
+        <OPENSCENEGRAPH_BASE_PATH>$(MyLibPath)\OpenSceneGraph-$(OSG_VER)</OPENSCENEGRAPH_BASE_PATH>
+        <OPENSCENEGRAPH_INCLUDE_PATH>$(OPENSCENEGRAPH_BASE_PATH)\Install-$(X8664)\include</OPENSCENEGRAPH_INCLUDE_PATH>
+        <OPENSCENEGRAPH_EXE_PATH>$(OPENSCENEGRAPH_BASE_PATH)\Install-$(X8664)\bin</OPENSCENEGRAPH_EXE_PATH>
+        <OPENSCENEGRAPH_LIB_PATH>$(OPENSCENEGRAPH_BASE_PATH)\Install-$(X8664)\lib</OPENSCENEGRAPH_LIB_PATH>
+
+        <HACK_PATH>$(CurrentDir)\hack;$(CurrentDir)\hack\osg-$(OSG_VER);$(CurrentDir)\hack\osgEarth-$(OSGEARTH_VER)</HACK_PATH>
+        <OPENSCENEGRAPH_AUX_INCLUDE_PATH>$(CurrentDir)\cpp\osg-$(OSG_VER);
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\OpenThreads;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osg;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osgDB;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osgGA;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osgSim;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osgUtil;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osgViewer;
+                                         $(CurrentDir)\cpp\osg-$(OSG_VER)\osgTerrain;</OPENSCENEGRAPH_AUX_INCLUDE_PATH>
+
+        <!-- osgEarth -->
+        <OSGEARTH_BASE_PATH>$(MyLibPath)\osgearth-$(OSGEARTH_VER)</OSGEARTH_BASE_PATH>
+        <OSGEARTH_INCLUDE_PATH>$(OSGEARTH_BASE_PATH)\Install-$(X8664)\include</OSGEARTH_INCLUDE_PATH>
+        <OSGEARTH_EXE_PATH>$(OSGEARTH_BASE_PATH)\Install-$(X8664)\bin</OSGEARTH_EXE_PATH>
+        <OSGEARTH_LIB_PATH>$(OSGEARTH_BASE_PATH)\Install-$(X8664)\lib</OSGEARTH_LIB_PATH>
+    </PropertyGroup>
+
+    <ItemGroup>
+
+        <IFile Include = "swig\osg-$(OSG_VER)\OpenThreads\OpenThreads.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>OpenThreads</Namespace>
+
+            <Lib>OpenThreads.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osg\osg.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osg</Namespace>
+
+            <Lib>OpenThreads.lib;osg.lib;opengl32.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osgDB\osgDB.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgDB</Namespace>
+
+            <Lib>OpenThreads.lib;osg.lib;osgDB.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll;osg_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osgGA\osgGA.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgGA</Namespace>
+
+            <Lib>osg.lib;osgGA.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>osg_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osgSim\osgSim.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgSim</Namespace>
+
+            <Lib>osg.lib;osgSim.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>osg_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osgUtil\osgUtil.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgUtil</Namespace>
+
+            <Lib>osg.lib;osgUtil.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>osg_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osgViewer\osgViewer.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgViewer</Namespace>
+
+            <Lib>osg.lib;osgGA.lib;osgViewer.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>osg_csharp.dll;osgDB_csharp.dll;osgGA_csharp.dll;osgUtil_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osg-$(OSG_VER)\osgTerrain\osgTerrain.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgTerrain</Namespace>
+
+            <Lib>osg.lib;osgTerrain.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>osg_csharp.dll;osgDB_csharp.dll;osgGA_csharp.dll;osgUtil_csharp.dll</CsReference>
+        </IFile>
+
+        <IFile Include = "swig\osgEarth-$(OSGEARTH_VER)\osgEarth\osgEarth.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarth</Namespace>
+
+            <Lib>OpenThreads.lib;osg.lib;osgDB.lib;osgEarth.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH);$(OSGEARTH_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER);swig\osgEarth-$(OSGEARTH_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH);$(OSGEARTH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH);$(OSGEARTH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll;osg_csharp.dll;osgDB_csharp.dll</CsReference>
+        </IFile>
+
+        <IFile Include = "swig\osgEarth-$(OSGEARTH_VER)\osgEarthSymbology\osgEarthSymbology.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarthSymbology</Namespace>
+
+            <Lib>osg.lib;osgEarth.lib;osgEarthSymbology.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH);$(OSGEARTH_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER);swig\osgEarth-$(OSGEARTH_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH);$(OSGEARTH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH);$(OSGEARTH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll;osg_csharp.dll;osgDB_csharp.dll;osgEarth_csharp.dll</CsReference>
+        </IFile>
+
+        <IFile Include = "swig\osgEarth-$(OSGEARTH_VER)\osgEarthFeatures\osgEarthFeatures.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarthFeatures</Namespace>
+
+            <Lib>osg.lib;osgDB.lib;osgEarth.lib;osgEarthSymbology.lib;osgEarthFeatures.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH);$(OSGEARTH_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER);swig\osgEarth-$(OSGEARTH_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH);$(OSGEARTH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH);$(OSGEARTH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll;osg_csharp.dll;osgDB_csharp;osgEarth_csharp.dll;osgEarthSymbology_csharp.dll</CsReference>
+        </IFile>
+        <IFile Include = "swig\osgEarth-$(OSGEARTH_VER)\osgEarthUtil\osgEarthUtil.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarthUtil</Namespace>
+
+            <Lib>osg.lib;osgDB.lib;osgGA.lib;osgEarth.lib;osgEarthUtil.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH);$(OSGEARTH_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER);swig\osgEarth-$(OSGEARTH_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH);$(OSGEARTH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH);$(OSGEARTH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll;osg_csharp.dll;osgDB_csharp.dll;osgGA_csharp.dll;osgEarth_csharp.dll;osgEarthSymbology_csharp.dll;osgEarthFeatures_csharp.dll</CsReference>
+        </IFile>
+
+        <IFile Include = "swig\osgEarth-$(OSGEARTH_VER)\osgEarthSplat\osgEarthSplat.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarthSplat</Namespace>
+
+            <Lib>osg.lib;osgDB.lib;osgEarth.lib;osgEarthUtil.lib;;osgEarthSymbology.lib;osgEarthSplat.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH);$(OSGEARTH_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER);swig\osgEarth-$(OSGEARTH_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH);$(OSGEARTH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH);$(OSGEARTH_LIB_PATH)</LibraryPath>
+            <CsReference>osg_csharp.dll;osgDB_csharp.dll;osgEarth_csharp.dll;osgEarthUtil_csharp.dll;osgEarthSymbology_csharp.dll</CsReference>
+        </IFile>
+
+        <IFile Include = "swig\osgEarth-$(OSGEARTH_VER)\osgEarthDrivers\osgEarthDrivers.i">
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarthDrivers</Namespace>
+
+            <Lib>osg.lib;osgEarth.lib;osgEarthSymbology.lib;osgEarthFeatures.lib;osgEarthUtil.lib</Lib>
+            <IncludePath>$(HACK_PATH);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH);$(OSGEARTH_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER);swig\osgEarth-$(OSGEARTH_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH);$(OSGEARTH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH);$(OSGEARTH_LIB_PATH)</LibraryPath>
+            <CsReference>OpenThreads_csharp.dll;osg_csharp.dll;osgDB_csharp.dll;osgEarth_csharp.dll;osgEarthSymbology_csharp.dll;osgEarthFeatures_csharp.dll;osgEarthUtil_csharp.dll</CsReference>
+        </IFile>
+
+        <IFile Include = "swig\osg-$(OSG_VER)\osgExtend\osgExtend.i">
+            <SwigTypeTable>osgExtend</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>osgExtend</Namespace>
+
+            <Lib>osg.lib;osgGA.lib</Lib>
+            <IncludePath>$(HACK_PATH);hack\osg-$(OSG_VER);$(OPENSCENEGRAPH_INCLUDE_PATH);$(OPENSCENEGRAPH_AUX_INCLUDE_PATH)</IncludePath>
+            <IIncludePath>swig;swig\osg-$(OSG_VER)</IIncludePath>
+            <ExecutablePath>$(OPENSCENEGRAPH_EXE_PATH)</ExecutablePath>
+            <LibraryPath>$(OPENSCENEGRAPH_LIB_PATH)</LibraryPath>
+            <CsReference>System.Windows.Forms;OpenThreads_csharp.dll;osg_csharp.dll;osgGA_csharp.dll;osgViewer_csharp.dll</CsReference>
+        </IFile>
+
+    </ItemGroup>
+
+    <!-- Import Project="..\..\Config.proj" / -->
+    <Import Project="$(MSBuildCommunityTasksPath)\MSBuild.Community.Tasks.Targets" />
+
+    <Target Name="Test">
+        <Message Text="X8664:   $(X8664)" />
+        <Message Text="Win3264: $(Win3264)" />
+    </Target>
+
+    <Target Name="Clean">
+        <Exec Command="RMDIR /S /Q $(OutputPath)"/>
+
+        <RemoveDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\osgnet" />
+        <RemoveDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\osg" />
+        <RemoveDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\osgEarth" />
+        <RemoveDir Directories="$(ExeOutputPath)\$(Configuration)\nuget" />
+        <RemoveDir Directories="$(ExeOutputPath)\$(Configuration)\$(Platform)" />
+
+        <ItemGroup>
+            <DeleteFile Include="$(ExeOutputPath)\$(Configuration)\*.nupkg" />
+            <DeleteFile Include="$(ExeOutputPath)\$(Configuration)\*.nuspec" />
+        </ItemGroup>
+        <Message Text="Delete $(ExeOutputPath)\$(Configuration)\*.nupkg;$(ExeOutputPath)\$(Configuration)\*.nuspec -> @(DeleteFile)" />
+        <Delete Files="@(DeleteFile)" />
+    </Target>
+
+    <Target Name="Build" DependsOnTargets="swig;BuildVcxproj;CppCompile;BuildCsproj;CSharpCompile;NuGet" />
+
+    <Target Name="Swig">
+        <Message Text="****************" />
+        <Message Text="***** Swig *****" />
+        <Message Text="****************" />
+        
+        <!-- Swig -->
+        <MSBuild Projects ="$(SelfFile)"
+                 Properties="namespace=%(IFile.Namespace);
+                             outfile=%(IFile.Namespace).cs;
+                             ifile=%(IFile.Identity);
+                             swigInclude=%(IFile.IncludePath);cpp\%(IFile.Project)\%(IFile.Namespace);cpp\common;%(IFile.IIncludePath);
+                             dllImport=%(IFile.Namespace)_wrap;
+                             swigTypeTable=%(IFile.SwigTypeTable);
+                             SwigOutpath=swig\%(IFile.Project)\%(IFile.Namespace)\;
+                             CppPath=$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace)\;
+                             CsPath=$(OutputPath)\csharp\%(IFile.Project)\%(IFile.Namespace)\"
+                 Targets="ImpSwig" />
+    </Target>
+
+    <Target Name="BuildVcxproj">
+        <Message Text="******************************" />
+        <Message Text="***** C++ Compile + Link *****" />
+        <Message Text="******************************" />
+
+        <Message Text="LibraryPath: %(IFile.LibraryPath)" />
+
+        <!-- Compile + Link -->
+        <MSBuild Projects ="$(SelfFile)"
+                 Properties="_ProjectName=%(IFile.Namespace)_wrap;
+                             _MyIncludePath=%(IFile.IncludePath);
+                             _MyExecutablePath=%(IFile.ExecutablePath);
+                             _MyLibraryPath=%(IFile.LibraryPath);$(ExeOutputPath)\$(Configuration)\$(Platform)\;
+                             _ClCompile=%(IFile.ClCompile);
+                             _ClInclude=%(IFile.ClInclude);
+                             _Lib=%(IFile.Lib);
+                             _CppPath=cpp\%(IFile.Project)\%(IFile.Namespace);
+                             _OutputPath=$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace);
+                             _OutputVcxproj=$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_$(Platform)_wrap.vcxproj"
+                 Targets="ImpBuildVcxproj" />
+    </Target>
+
+    <Target Name="CppCompile">
+        <Message Text="******************************" />
+        <Message Text="***** C++ Compile + Link *****" />
+        <Message Text="******************************" />
+
+        <Message Text="LibraryPath: %(IFile.LibraryPath)" />
+
+        <!-- Compile + Link -->
+        <MSBuild Projects ="$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_$(Platform)_wrap.vcxproj"
+                 Properties="Configuration=$(Configuration);Platform=$(Platform)"
+                 Targets="Build" />
+
+
+        <!-- <MSBuild Projects ="Build-Template.vcxproj"
+                 Properties="ProjectName=%(IFile.Namespace)_wrap;
+                             Configuration=$(Configuration);
+                             Platform=$(Platform);
+                             MyIncludePath=%(IFile.IncludePath);
+                             MyExecutablePath=%(IFile.ExecutablePath);
+                             MyLibraryPath=%(IFile.LibraryPath);$(ExeOutputPath)\$(Configuration)\$(Platform)\;
+                             ClCompile=%(IFile.ClCompile);$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_wrap.cxx;
+                             ClInclude=%(IFile.ClInclude);
+                             Lib=%(IFile.Lib);"
+                 Targets="Build" /> -->
+        <!-- Error: si se llama a este target, no funciona -->
+        <!-- <MSBuild Projects ="$(SelfFile)"
+                 Properties="ProjectName=%(IFile.dllimport);
+                             Configuration=$(Configuration);
+                             Platform=$(Platform);
+                             IncludePath=%(IFile.IncludePath);
+                             ExecutablePath=%(IFile.ExecutablePath);
+                             LibraryPath=%(IFile.LibraryPath);$(ExeOutputPath)\$(Configuration)\$(Platform)\;
+                             ClCompile=%(IFile.ClCompile);$(OutputPath)\cpp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_wrap.cxx;
+                             ClInclude=%(IFile.ClInclude);
+                             Lib=%(IFile.Lib)"
+                 Targets="Compile" /> -->
+    </Target>
+
+    <Target Name="BuildCsproj">
+        <Message Text="**********************" />
+        <Message Text="***** C# Compile *****" />
+        <Message Text="**********************" />
+
+        <MSBuild Projects ="$(SelfFile)"
+                 Properties="_ProjectName=%(IFile.Namespace)_csharp;
+                             _CsReference=%(IFile.CsReference);
+                             _CsPath=csharp\%(IFile.Project)\%(IFile.Namespace);
+                             _OutputPath=$(OutputPath)\csharp\%(IFile.Project)\%(IFile.Namespace);
+                             _OutputCsproj=$(OutputPath)\csharp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_csharp.csproj"
+                 Targets="ImpBuildCsproj" />
+        
+        <!-- Compile + Link -->
+        <!-- <MSBuild Projects ="Build-Template.csproj"
+                 Properties="ProjectName=%(IFile.Namespace)_csharp;
+                             Configuration=$(Configuration);
+                             Platform=anycpu;
+                             CsCompile=%(IFile.CsCompile);$(OutputPath)\csharp\%(IFile.Project)\%(IFile.Namespace)\*.cs;
+                             CsReference=%(IFile.CsReference)"
+                 Targets="Build" /> -->
+    </Target>
+
+    <Target Name="CSharpCompile">
+        <Message Text="**********************" />
+        <Message Text="***** C# Compile *****" />
+        <Message Text="**********************" />
+
+        <!-- Se compila. -->
+        <MSBuild Projects ="$(OutputPath)\csharp\%(IFile.Project)\%(IFile.Namespace)\%(IFile.Namespace)_csharp.csproj"
+                 Properties="Configuration=$(Configuration);Platform=anycpu"
+                 Targets="Build" />
+    </Target>
+
+    <Target Name="NuGetDependencies">
+        <!--
+        <Message Text="****************" />
+        <Message Text="***** gdal *****" />
+        <Message Text="****************" />
+
+        <Exec WorkingDirectory="$(GDAL_NUGET_PATH)"
+              Command="nmake /F mymakefile.vc preparar OUTPUT_BASE=$(ExeOutputPath)\$(Configuration)\"/>
+
+        <Exec WorkingDirectory="$(GDAL_NUGET_PATH)"
+              Command="nmake /f mymakefile.vc preparar WIN64=YES OUTPUT_BASE=$(ExeOutputPath)\$(Configuration)\"/> -->
+
+
+    </Target>
+
+    <Target Name="NuGet_osg">
+        <Message Text="********************************" />
+        <Message Text="***** NuGet OpenSceneGraph *****" />
+        <Message Text="********************************" />
+
+        <PropertyGroup>
+            <NuGetName>osg</NuGetName>
+        </PropertyGroup>
+
+        <Exec WorkingDirectory="$(OPENSCENEGRAPH_NUGET_PATH)"
+              Command="Build_preparar.bat $(ExeOutputPath)\$(Configuration)\nuget\$(osg)\build\native"/>
+
+        <ItemGroup>
+            <DeleteFile_osg Include="$(ExeOutputPath)\$(Configuration)\nuget\$(osg)\build\native\**\*.exe" />
+            <CopyFile_osg Include="nuget\$(osg)\**\*" Exclude="nuget\$(osg)\*.nuspec"/>
+
+            <Tokens_osgearth Include="NUGET_NAME"><ReplacementValue>$(NuGetName)</ReplacementValue></Tokens_osgearth>
+            <Tokens_osg Include="VERSION"><ReplacementValue>$(NUGET_OSG_VER)</ReplacementValue></Tokens_osg>
+        </ItemGroup>
+
+        <Delete Files="@(DeleteFile_osg)" />
+
+        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\tools"/>
+
+        <Copy SourceFiles="@(CopyFile_osg)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(osg)\%(CopyFile_osg.RecursiveDir)" />
+
+        <TemplateFile Template="templates\nuget\$(osg).nuspec.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\$(osg).nuspec"
+                      Tokens="@(Tokens_osg)" />
+
+        <Exec Command="$(NuGetBase)\nuget.exe pack $(ExeOutputPath)\$(Configuration)\$(osg).nuspec -BasePath $(ExeOutputPath)\$(Configuration)\nuget\$(osg) -OutputDirectory $(ExeOutputPath)\$(Configuration)\"/>
+    </Target>
+
+    <Target Name="NuGet_osgearth">
+        <Message Text="**************************" />
+        <Message Text="***** NuGet osgearth *****" />
+        <Message Text="**************************" />
+
+        <PropertyGroup>
+            <NuGetName>osgEarth</NuGetName>
+        </PropertyGroup>
+
+        <Exec WorkingDirectory="$(OSGEARTH_NUGET_PATH)"
+              Command="Build_preparar.bat $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native"/>
+
+        <ItemGroup>
+            <DeleteFile_osgearth Include="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\build\native\**\*.exe" />
+            <CopyFile_osgearth Include="nuget\$(NuGetName)\**\*" Exclude="nuget\$(NuGetName)\*.nuspec"/>
+
+            <Tokens_osgearth Include="NUGET_NAME"><ReplacementValue>$(NuGetName)</ReplacementValue></Tokens_osgearth>
+            <Tokens_osgearth Include="VERSION"><ReplacementValue>$(NUGET_OSGEARTH_VER)</ReplacementValue></Tokens_osgearth>
+            <Tokens_osgearth Include="OSG_VER"><ReplacementValue>$(NUGET_OSG_VER)</ReplacementValue></Tokens_osgearth>
+            <Tokens_osgearth Include="GDAL_VER"><ReplacementValue>$(NUGET_GDAL_VER)</ReplacementValue></Tokens_osgearth>
+        </ItemGroup>
+
+        <Delete Files="@(DeleteFile_osgearth)" />
+
+        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\tools"/>
+
+        <Copy SourceFiles="@(CopyFile_osgearth)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName)\%(CopyFile_osgearth.RecursiveDir)" />
+
+        <TemplateFile Template="templates\nuget\nuget.props.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.props"
+                      Tokens="@(Tokens_osgnet)" />
+        <TemplateFile Template="templates\nuget\nuget.targets.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.targets"
+                      Tokens="@(Tokens_osgnet)" />
+        <TemplateFile Template="templates\nuget\$(NuGetName).nuspec.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\$(NuGetName).nuspec"
+                      Tokens="@(Tokens_osgearth)" />
+
+        <Exec Command="$(NuGetBase)\nuget.exe pack $(ExeOutputPath)\$(Configuration)\$(NuGetName).nuspec -BasePath $(ExeOutputPath)\$(Configuration)\nuget\$(NuGetName) -OutputDirectory $(ExeOutputPath)\$(Configuration)\"/>
+    </Target>
+
+    <Target Name="NuGet">
+        <Message Text="*********************" />
+        <Message Text="***** NuGetPack *****" />
+        <Message Text="*********************" />
+
+        <PropertyGroup>
+            <NuGetName>osgnet</NuGetName>
+        </PropertyGroup>
+        <ItemGroup>
+            <NuGetCopyFile Include="nuget\osgnet\**\*" Exclude="nuget\osgnet\*.nuspec"/>
+            <CopyFile_x86 Include="$(ExeOutputPath)\$(Configuration)\Win32\*_wrap.dll" />
+            <CopyFile_x64 Include="$(ExeOutputPath)\$(Configuration)\x64\*_wrap.dll" />
+            <CopyFile_csharp Include="$(ExeOutputPath)\$(Configuration)\anycpu\*_csharp.dll" />
+
+            <Tokens_osgnet Include="NUGET_NAME"><ReplacementValue>${NuGetName}</ReplacementValue></Tokens_osgnet>
+            <Tokens_osgnet Include="VERSION"><ReplacementValue>$(NUGET_OSGNET_VER)</ReplacementValue></Tokens_osgnet>
+            <Tokens_osgnet Include="OSG_VER"><ReplacementValue>$(NUGET_OSG_VER)</ReplacementValue></Tokens_osgnet>
+            <Tokens_osgnet Include="OSGEARTH_VER"><ReplacementValue>$(NUGET_OSGEARTH_VER)</ReplacementValue></Tokens_osgnet>
+            <Tokens_osgnet Include="GDAL_VER"><ReplacementValue>$(NUGET_GDAL_VER)</ReplacementValue></Tokens_osgnet>
+        </ItemGroup>
+
+        <MakeDir Directories="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client;
+                              $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\tools"/>
+
+        <Copy SourceFiles="@(NuGetCopyFile)"   DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\%(NuGetCopyFile.RecursiveDir)" />
+        <Copy SourceFiles="@(CopyFile_x86)"    DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x86" />
+        <Copy SourceFiles="@(CopyFile_x64)"    DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\native\x64" />
+        <Copy SourceFiles="@(CopyFile_csharp)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\lib\net40-client" />
+
+        <Message Text="-------------------------------------------------------------" />
+        <Message Text="NuGetCopyFile:   @(NuGetCopyFile)" />
+        <Message Text="CopyFile_x86:    @(CopyFile_x86)" />
+        <Message Text="CopyFile_x64:    @(CopyFile_x64)" />
+        <Message Text="CopyFile_csharp: @(CopyFile_csharp)" />
+        <Message Text="-------------------------------------------------------------" />
+
+        <TemplateFile Template="templates\nuget\nuget.props.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.props"
+                      Tokens="@(Tokens_osgnet)" />
+        <TemplateFile Template="templates\nuget\nuget.targets.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\nuget\${NuGetName}\build\${NuGetName}.targets"
+                      Tokens="@(Tokens_osgnet)" />
+        <TemplateFile Template="templates\nuget\${NuGetName}.nuspec.template"
+                      OutputFilename="$(ExeOutputPath)\$(Configuration)\${NuGetName}.nuspec"
+                      Tokens="@(Tokens_osgnet)" />
+
+        <Exec Command="$(NuGetBase)\nuget.exe pack $(ExeOutputPath)\$(Configuration)\${NuGetName}.nuspec -BasePath $(ExeOutputPath)\$(Configuration)\nuget\${NuGetName} -OutputDirectory $(ExeOutputPath)\$(Configuration)\"/>
+    </Target>
+
+    <Target Name="ImpSwig">
+        <PropertyGroup>
+            <!-- <dllImport></dllImport>
+            <swigTypeTable></swigTypeTable>
+            <namespace></namespace>
+            <outfile></outfile>
+            <ifile></ifile>
+            <swigInclude></swigInclude> -->
+
+            <VC_PATH>C:\Program Files (x86)\Microsoft Visual Studio 10.0\VC</VC_PATH>
+            <W_PATH>C:\Program Files (x86)\Microsoft SDKs\Windows\v7.0A</W_PATH>
+
+            <CommonInclude>-I&quot;$(VC_PATH)\include&quot; -I&quot;$(W_PATH)\include&quot;</CommonInclude>
+
+            <SwigCommonArgs>-O -fastdispatch -fvirtual -dllimport $(dllImport) -c++ -csharp -DSWIG_TYPE_TABLE=$(swigTypeTable)</SwigCommonArgs>
+        </PropertyGroup>
+
+        <ItemGroup>
+            <_swigInclude Include="$(swigInclude)" />
+        </ItemGroup>
+
+        <Exec Command="$(SwigBase)\swig.exe $(CommonInclude) @(_swigInclude -> '-I%(Identity)', ' ') $(SwigCommonArgs) -namespace $(namespace) -outfile $(outfile) $(ifile)"/>
+
+        <ItemGroup>
+            <CsCopyFile Include="$(SwigOutpath)\*.cs" />
+        </ItemGroup>
+
+        <ItemGroup>
+            <CppCopyFile Include="$(SwigOutpath)\*_wrap.cxx" />
+            <CppCopyFile Include="$(SwigOutpath)\*_wrap.h" />
+        </ItemGroup>
+
+        <Message Text="**********************************************" />
+        <Message Text="SwigOutpath $(SwigOutpath)" />
+        <Message Text="CppPath     $(CppPath)" />
+        <Message Text="CsPath      $(CsPath)" />
+        <Message Text="Copy @(CsCopyFile) to $(CsPath)" />
+        <Message Text="Copy @(CppCopyFile) to $(CsPath)" />
+        <Message Text="**********************************************" />
+
+        <Move SourceFiles="@(CsCopyFile)" DestinationFolder="$(CsPath)" />
+        <Move SourceFiles="@(CppCopyFile)" DestinationFolder="$(CppPath)" />
+    </Target>
+
+    <Target Name="ImpCompile">
+        <!-- Compile + Link -->
+        <Message Text="**********************************************" />
+        <Message Text="IncludePath    = $(IncludePath)" />
+        <Message Text="ExecutablePath = $(ExecutablePath)" />
+        <Message Text="LibraryPath    = $(LibraryPath)" />
+        <Message Text="ClCompile      = $(ClCompile)" />
+        <Message Text="ClInclude      = $(ClInclude)" />
+        <Message Text="Lib            = $(Lib)" />
+        <Message Text="**********************************************" />
+
+        <MSBuild Projects ="Build-Template.vcxproj"
+                 Properties="ProjectName=$(ProjectName);
+                             Configuration=$(Configuration);
+                             Platform=$(Platform);
+                             MyIncludePath=$(IncludePath);
+                             MyExecutablePath=$(ExecutablePath);
+                             MyLibraryPath=$(LibraryPath);
+                             ClCompile=$(ClCompile);
+                             ClInclude=$(ClInclude);
+                             Lib=$(Lib)"
+                 Targets="Build" />
+
+        <ItemGroup>
+            <CopyFiles Include="$(ExeOutputPath)\$(Configuration)\$(Platform)\$(ProjectName)\*.dll" />
+            <CopyFiles Include="$(ExeOutputPath)\$(Configuration)\$(Platform)\$(ProjectName)\*.lib" />
+        </ItemGroup>
+        <Copy SourceFiles="@(CopyFiles)" DestinationFolder="$(ExeOutputPath)\$(Configuration)\$(Platform)\" />
+    </Target>
+
+    <!-- Genera los ficheros de proyecto de C++. -->
+    <Target Name="ImpBuildVcxproj">
+        <!-- Se copian los ficheros a la salida. -->
+        <ItemGroup>
+            <Files Include="$(_CppPath)\**\*.*" />
+            <Files Include="cpp\common\**\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(Files)"
+              DestinationFiles="@(Files->'$(_OutputPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+        <!-- Se preparan las propiedades. -->
+        <!-- http://stackoverflow.com/questions/9055659/expand-msbuild-properties-containing-wildcard-into-items -->
+        <ItemGroup>
+            <_TempClCompile Include="$(_ClCompile);$(_OutputPath)\*.cxx;$(_OutputPath)\*.cpp;$(_OutputPath)\*.c;" />
+        </ItemGroup>
+        <CreateItem Include="@(_TempClCompile->'%(Identity)')"> 
+            <Output TaskParameter="Include" ItemName="ClCompile" /> 
+        </CreateItem>
+
+        <ItemGroup>
+            <_TempClInclude Include="$(_ClInclude);$(_OutputPath)\*.hxx;$(_OutputPath)\*.hpp;$(_OutputPath)\*.h;" />
+        </ItemGroup>
+        <CreateItem Include="@(_TempClInclude->'%(Identity)')"> 
+            <Output TaskParameter="Include" ItemName="ClInclude" /> 
+        </CreateItem>
+
+        <!-- Se preparan las propiedades de reemplazo para la plantilla. -->
+        <ItemGroup>
+            <Tokens Include="ProjectName">
+                <ReplacementValue>$(_ProjectName)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="MyIncludePath">
+                <ReplacementValue>.;$(_MyIncludePath)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="MyExecutablePath">
+                <ReplacementValue>$(_MyExecutablePath)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="MyLibraryPath">
+                <ReplacementValue>$(_MyLibraryPath)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="Lib">
+                <ReplacementValue>$(_Lib)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="XmlInclude">
+                <ReplacementValue>
+%3CItemGroup%3E
+@(ClCompile->'    %3CClCompile Include=%22%(Filename)%(Extension)%22 /%3E', '%0D%0A')
+%3C/ItemGroup%3E
+
+%3CItemGroup%3E
+@(ClInclude->'    %3CClInclude Include=%22%(Filename)%(Extension)%22 /%3E', '%0D%0A')
+%3C/ItemGroup%3E
+                </ReplacementValue>
+            </Tokens>
+        </ItemGroup>
+
+        <!-- Se ejecuta la plantilla. -->
+        <TemplateFile Template="Build-Template-2.vcxproj"
+                      OutputFilename="$(_OutputVcxproj)"
+                      Tokens="@(Tokens)" />
+    </Target>
+
+    <!-- Genera los ficheros de proyecto de C#. -->
+    <Target Name="ImpBuildCsproj">
+        <!-- Se copian los ficheros a la salida. -->
+        <ItemGroup>
+            <Files Include="$(_CsPath)\**\*.*" />
+            <Files Include="csharp\common\**\*.*" />
+        </ItemGroup>
+        <Copy SourceFiles="@(Files)"
+              DestinationFiles="@(Files->'$(_OutputPath)\%(RecursiveDir)%(Filename)%(Extension)')" />
+
+        <!-- Se preparan las propiedades. -->
+        <!-- http://stackoverflow.com/questions/9055659/expand-msbuild-properties-containing-wildcard-into-items -->
+        <ItemGroup>
+            <_TempFiles Include="$(_CsReference)" />
+        </ItemGroup>
+        <CreateItem Include="@(_TempFiles->'%(Identity)')"> 
+            <Output TaskParameter="Include" ItemName="CsReferences" /> 
+        </CreateItem>
+
+        <ItemGroup>
+            <CsFiles Include="$(_OutputPath)\**\*.cs" Exclude="$(_OutputPath)\**\*.Designer.cs"/>
+            <ConfigFiles Include="$(_OutputPath)\**\*.config" />
+            <SettingsFiles Include="$(_OutputPath)\**\*.settings" />
+        </ItemGroup>
+
+        <!-- http://stackoverflow.com/questions/9055659/expand-msbuild-properties-containing-wildcard-into-items -->
+        <!-- <ItemGroup>
+            <_TempFiles Include="$(_CsCompile)" />
+        </ItemGroup>
+        <CreateItem Include="@(_TempFiles->'%(Identity)')"> 
+            <Output TaskParameter="Include" ItemName="Files" /> 
+        </CreateItem> -->
+
+        <!-- Se preparan las propiedades de reemplazo para la plantilla. -->
+        <ItemGroup>
+            <Tokens Include="ProjectName">
+                <ReplacementValue>$(_ProjectName)</ReplacementValue>
+            </Tokens>
+            <Tokens Include="XmlInclude">
+                <ReplacementValue>
+%3CItemGroup%3E
+    %3CReference Include=%22System%22 /%3E
+
+    @(CsReferences->'%3CReference Include=%22%(Filename)%(Extension)%22%3E
+        %3CPrivate%3ETrue%3C/Private%3E
+    %3C/Reference%3E', '%0D%0A')
+%3C/ItemGroup%3E
+
+%3CItemGroup%3E
+    @(CsFiles->'%3CCompile Include=%22%(RecursiveDir)%(Filename)%(Extension)%22%3E
+        %3CSubType%3ECode%3C/SubType%3E
+    %3C/Compile%3E', '%0D%0A')
+
+    @(ConfigFiles->'%3CNone Include=%22%(RecursiveDir)%(Filename).config%22%3E
+        %3CSubType%3EDesigner%3C/SubType%3E
+    %3C/None%3E', '%0D%0A')
+
+    @(SettingsFiles->'%3CNone Include=%22%(RecursiveDir)%(Filename).settings%22%3E
+        %3CGenerator%3EPublicSettingsSingleFileGenerator%3C/Generator%3E
+        %3CLastGenOutput%3E%(Filename).Designer.cs%3C/LastGenOutput%3E
+    %3C/None%3E
+    %3CCompile Include=%22%(RecursiveDir)%(Filename).Designer.cs%22%3E
+        %3CAutoGen%3ETrue%3C/AutoGen%3E
+        %3CDesignTimeSharedInput%3ETrue%3C/DesignTimeSharedInput%3E
+        %3CDependentUpon%3E%(Filename).settings%3C/DependentUpon%3E
+    %3C/Compile%3E', '%0D%0A')
+%3C/ItemGroup%3E
+                </ReplacementValue>
+            </Tokens>
+        </ItemGroup>
+
+        <!-- Se ejecuta la plantilla. -->
+        <TemplateFile Template="Build-Template-2.csproj"
+                      OutputFilename="$(_OutputCsproj)"
+                      Tokens="@(Tokens)" />
+    </Target>
+
+    <Target Name="NuGetDirectories">
+        <MakeDir Directories="$(ExeOutputPath)\test\build\native\x64;
+                              $(ExeOutputPath)\test\build\native\x86;
+                              $(ExeOutputPath)\test\lib\net40-client;
+                              $(ExeOutputPath)\test\tools"/>
+    </Target>
+
+    <!-- <Target Name="Build">
+        <PropertyGroup>
+            <dllimport>osgdll</dllimport>
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osgEarth-$(OSGEARTH_VER)</Project>
+            <Namespace>osgEarthSymbology</Namespace>
+        </PropertyGroup>
+        <ItemGroup>
+            <ClCompile Include="hack\LODEx.cpp" />
+            <ClCompile Include="hack\MoveWithEyePointTransform.cpp" />
+            <ClCompile Include="hack\MyFirstPersonManipulator.cpp" />
+
+            <ClCompile Include="$(OutputPath)\cpp\osg-$(OSG_VER)\*.cxx" />
+            <ClCompile Include="$(OutputPath)\cpp\osgEarth-$(OSGEARTH_VER)\*.cxx" />
+
+            <ClCompile Include="dllmain.cpp" />
+            <ClCompile Include="osgdll.cpp" />
+            <ClCompile Include="stdafx.cpp" />
+        </ItemGroup>
+        <ItemGroup>
+            <ClInclude Include="hack\CalculateBoundingBox.h" />
+            <ClInclude Include="hack\CastUtils.h" />
+            <ClInclude Include="hack\LODEx.h" />
+            <ClInclude Include="hack\MoveWithEyePointTransform.h" />
+            <ClInclude Include="hack\MyFirstPersonManipulator.h" />
+
+            <ClInclude Include="$(OutputPath)\cpp\osg-$(OSG_VER)\*.h" />
+            <ClInclude Include="$(OutputPath)\cpp\osgEarth-$(OSGEARTH_VER)\*.h" />
+
+            <ClInclude Include="stdafx.h" />
+            <ClInclude Include="targetver.h" />
+        </ItemGroup>
+        <ItemGroup>
+            <Lib Include="OpenThreads.lib;
+                          osg.lib;
+                          osgUtil.lib;
+                          osgDB.lib;
+                          osgViewer.lib;
+                          osgGA.lib;
+                          osgSim.lib;
+                          osgTerrain.lib;
+                          osgEarth.lib;
+                          osgEarthAnnotation.lib;
+                          osgEarthFeatures.lib;
+                          osgEarthSymbology.lib;
+                          osgEarthUtil.lib;
+                          opengl32.lib" />
+        </ItemGroup>
+        <ItemGroup>
+            <IncludePath Include="hack" />
+            <IncludePath Include="hack\osg-$(OSG_VER)" />
+            <IncludePath Include="hack\osgEarth-$(OSGEARTH_VER)" />
+            <IncludePath Include="$(OPENSCENEGRAPH_INCLUDE_PATH)" />
+            <IncludePath Include="$(OSGEARTH_INCLUDE_PATH)" />
+        </ItemGroup>
+        <ItemGroup>
+            <IIncludePath Include="swig" />
+            <IIncludePath Include="swig\osg-$(OSG_VER)" />
+            <IIncludePath Include="swig\osgEarth-$(OSGEARTH_VER)" />
+        </ItemGroup>
+        <ItemGroup>
+            <ExecutablePath Include="$(OPENSCENEGRAPH_EXE_PATH)" />
+            <ExecutablePath Include="$(OSGEARTH_EXE_PATH)" />
+        </ItemGroup>
+        <ItemGroup>
+            <LibraryPath Include="$(OPENSCENEGRAPH_LIB_PATH)" />
+            <LibraryPath Include="$(OSGEARTH_LIB_PATH)" />
+        </ItemGroup>
+
+        <!- - <Message Text="IncludePath = &quot;$(MyIncludePath)&quot;" />
+        <Message Text="ExecutablePath = &quot;$(MyExecutablePath)&quot;" />
+        <Message Text="LibraryPath = &quot;$(MyLibraryPath)&quot;" />
+        <Message Text="ClCompile = &quot;$(MyClCompile)&quot;" />
+        <Message Text="ClInclude = &quot;$(MyClInclude)&quot;" />
+        <Message Text="Lib = &quot;$(MyLib)&quot;" /> - ->
+
+        <!- - <MSBuild Projects ="$(SelfFile)"
+                 Properties="ClCompile=$(MyClCompile)"
+                 Targets="Test" /> - ->
+
+        <!- - Swig - ->
+        <PropertyGroup>
+            <SwigNamespace>$(Namespace)</SwigNamespace>
+            <SwigOutfile>$(Namespace).cs</SwigOutfile>
+            <SwigOutpath>swig\$(Project)\$(Namespace)\</SwigOutpath>
+            <SwigIFile>swig\$(Project)\$(Namespace)\$(Namespace).i</SwigIFile>
+
+            <SwigInclude>@(IncludePath -> '%(Identity)');@(IIncludePath -> '%(Identity)')</SwigInclude>
+
+            <CppPath>$(Project)\$(OutputPath)\cpp\$(Namespace)\</CppPath>
+            <CsPath>$(Project)\csharp\$(Namespace)\</CsPath>
+        </PropertyGroup>
+        <MSBuild Projects ="$(SelfFile)"
+                 Properties="namespace=$(SwigNamespace);
+                             outfile=$(SwigOutfile);
+                             ifile=$(SwigIFile);
+                             swigInclude=$(SwigInclude);
+                             dllImport=$(dllimport);
+                             swigTypeTable=$(SwigTypeTable);
+                             SwigOutpath=$(SwigOutpath);
+                             CppPath=$(CppPath);
+                             CsPath=$(CsPath)"
+                 Targets="Swig" />
+
+        <!- - Compile + Link - ->
+        <PropertyGroup>
+            <MyIncludePath>@(IncludePath)</MyIncludePath>
+            <MyExecutablePath>@(ExecutablePath)</MyExecutablePath>
+            <MyLibraryPath>@(LibraryPath)</MyLibraryPath>
+            <MyClCompile>@(ClCompile)</MyClCompile>
+            <MyClInclude>@(ClInclude)</MyClInclude>
+            <MyLib>@(Lib)</MyLib>
+        </PropertyGroup>
+        <MSBuild Projects ="Build-Template.vcxproj"
+                 Properties="ProjectName=$(dllimport);
+                             Configuration=$(Configuration);
+                             Platform=$(Platform);
+                             MyIncludePath=$(MyIncludePath);
+                             MyExecutablePath=$(MyExecutablePath);
+                             MyLibraryPath=$(MyLibraryPath);
+                             ClCompile=$(MyClCompile);
+                             ClInclude=$(MyClInclude);
+                             Lib=$(MyLib);"
+                 Targets="Build" />
+    </Target>
+
+    <Target Name="Build_OpenThreads">
+        <PropertyGroup>
+            <dllimport>OpenThreadsdll</dllimport>
+            <SwigTypeTable>osg</SwigTypeTable>
+
+            <Project>osg-$(OSG_VER)</Project>
+            <Namespace>OpenThreads</Namespace>
+
+            <CppPath>$(OutputPath)\cpp\$(Project)\$(Namespace)\</CppPath>
+            <CsPath>$(OutputPath)\csharp\$(Project)\$(Namespace)\</CsPath>
+        </PropertyGroup>
+        <ItemGroup>
+            <ClCompile Include="$(CppPath)\*.cxx" />
+
+            <ClCompile Include="dllmain.cpp" />
+            <ClCompile Include="osgdll.cpp" />
+            <ClCompile Include="stdafx.cpp" />
+        </ItemGroup>
+        <ItemGroup>
+            <ClInclude Include="$(CppPath)\*.h" />
+
+            <ClInclude Include="stdafx.h" />
+            <ClInclude Include="targetver.h" />
+        </ItemGroup>
+        <ItemGroup>
+            <Lib Include="OpenThreads.lib;opengl32.lib" />
+        </ItemGroup>
+        <ItemGroup>
+            <IncludePath Include="hack" />
+            <IncludePath Include="hack\osg-$(OSG_VER)" />
+            <IncludePath Include="$(OPENSCENEGRAPH_INCLUDE_PATH)" />
+        </ItemGroup>
+        <ItemGroup>
+            <IIncludePath Include="swig" />
+            <IIncludePath Include="swig\osg-$(OSG_VER)" />
+        </ItemGroup>
+        <ItemGroup>
+            <ExecutablePath Include="$(OPENSCENEGRAPH_EXE_PATH)" />
+        </ItemGroup>
+        <ItemGroup>
+            <LibraryPath Include="$(OPENSCENEGRAPH_LIB_PATH)" />
+        </ItemGroup>
+
+        <!- - Swig - ->
+        <PropertyGroup>
+            <SwigNamespace>$(Namespace)</SwigNamespace>
+            <SwigOutfile>$(Namespace).cs</SwigOutfile>
+            <SwigOutpath>swig\$(Project)\$(Namespace)\</SwigOutpath>
+            <SwigIFile>swig\$(Project)\$(Namespace)\$(Namespace).i</SwigIFile>
+
+            <SwigInclude>@(IncludePath -> '%(Identity)');@(IIncludePath -> '%(Identity)')</SwigInclude>
+        </PropertyGroup>
+        <MSBuild Projects ="$(SelfFile)"
+                 Properties="namespace=$(SwigNamespace);
+                             outfile=$(SwigOutfile);
+                             ifile=$(SwigIFile);
+                             swigInclude=$(SwigInclude);
+                             dllImport=$(dllimport);
+                             swigTypeTable=$(SwigTypeTable);
+                             SwigOutpath=$(SwigOutpath);
+                             CppPath=$(CppPath);
+                             CsPath=$(CsPath)"
+                 Targets="Swig" />
+
+        <!- - Compile + Link - ->
+        <PropertyGroup>
+            <MyIncludePath>@(IncludePath)</MyIncludePath>
+            <MyExecutablePath>@(ExecutablePath)</MyExecutablePath>
+            <MyLibraryPath>@(LibraryPath)</MyLibraryPath>
+            <MyClCompile>@(ClCompile)</MyClCompile>
+            <MyClInclude>@(ClInclude)</MyClInclude>
+            <MyLib>@(Lib)</MyLib>
+        </PropertyGroup>
+        <MSBuild Projects ="Build-Template.vcxproj"
+                 Properties="ProjectName=$(dllimport);
+                             Configuration=$(Configuration);
+                             Platform=$(Platform);
+                             MyIncludePath=$(MyIncludePath);
+                             MyExecutablePath=$(MyExecutablePath);
+                             MyLibraryPath=$(MyLibraryPath);
+                             ClCompile=$(MyClCompile);
+                             ClInclude=$(MyClInclude);
+                             Lib=$(MyLib);"
+                 Targets="Build" />
+    </Target> -->
+
+</Project>
