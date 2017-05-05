@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+    <metadata>
+        <id>${Id}</id>
+        <version>${Version}</version>
+        <title>${Title}</title>
+        <authors>${Authors}</authors>
+        <licenseUrl>${LicenseUrl}</licenseUrl>
+        <projectUrl>${ProjectUrl}</projectUrl>
+        <iconUrl>${IconUrl}</iconUrl>
+        <requireLicenseAcceptance>false</requireLicenseAcceptance>
+        <description>${Description}</description>
+        <dependencies>
+            ${XmlDependencies}
+        </dependencies>
+    </metadata>
+</package>

@@ -9,12 +9,18 @@
 
     <Target Name="${NUGET_NAME}AfterBuild">
         <ItemGroup>
-            <copyToOutput Include="$(MSBuildThisFileDirectory)native\**\*.*" />
+            <copyToNative Include="$(MSBuildThisFileDirectory)native\**\*.*" />
+            <copyToData Include="$(MSBuildThisFileDirectory)**\*.*"
+                        Exclude="$(MSBuildThisFileDirectory)native\**\*.*;
+                                 $(MSBuildThisFileDirectory)lib\**\*.*;
+                                 $(MSBuildThisFileDirectory)tools\**\*.*;" />
         </ItemGroup>
 
         <Message Text="Iniciando ${NUGET_NAME}Build para ${NUGET_NAME}" />
-        <Message Text="Contenido : @(copyToOutput)" />
+        <Message Text="Native : @(copyToNative)" />
+        <Message Text="Data   : @(copyToNative)" />
 
-        <Copy ContinueOnError="true" SourceFiles="@(copyToOutput)" DestinationFolder="$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" />
+        <Copy ContinueOnError="true" SourceFiles="@(copyToNative)" DestinationFolder="$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" />
+        <Copy ContinueOnError="true" SourceFiles="@(copyToData)" DestinationFolder="$(OutputPath)\%(RecursiveDir)" SkipUnchangedFiles="true" />
     </Target>
 </Project>

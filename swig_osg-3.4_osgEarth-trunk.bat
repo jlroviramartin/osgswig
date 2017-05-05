@@ -6,12 +6,12 @@
 
 @msbuild /t:Test                                         %PROJECT%
 
-@rem msbuild /t:Clean                                        %PROJECT%
-@rem msbuild /t:swig                                         %PROJECT%
+@msbuild /t:Clean                                        %PROJECT%
+@msbuild /t:swig                                         %PROJECT%
 @msbuild /t:BuildVcxproj;CppCompile /p:Platform=x64      %PROJECT%
 @msbuild /t:BuildVcxproj;CppCompile /p:Platform=Win32    %PROJECT%
-@rem msbuild /t:BuildCsproj;CSharpCompile /p:Platform=anycpu %PROJECT%
+@msbuild /t:BuildCsproj;CSharpCompile /p:Platform=anycpu %PROJECT%
 
-@rem msbuild /t:NuGetDependencies;NuGet          %PROJECT%
+@msbuild /t:NuGet          %PROJECT%
 
 :exit
