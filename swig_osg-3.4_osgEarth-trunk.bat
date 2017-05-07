@@ -4,7 +4,7 @@
 
 @set PROJECT=swig_osg-3.4_osgEarth-trunk.proj
 
-@msbuild /t:Test                                         %PROJECT%
+@rem msbuild /t:Test                                         %PROJECT%
 
 @msbuild /t:Clean                                        %PROJECT%
 @msbuild /t:swig                                         %PROJECT%
@@ -13,5 +13,7 @@
 @msbuild /t:BuildCsproj;CSharpCompile /p:Platform=anycpu %PROJECT%
 
 @msbuild /t:NuGet          %PROJECT%
+
+@pause
 
 :exit

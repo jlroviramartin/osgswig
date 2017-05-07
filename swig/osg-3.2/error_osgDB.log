@@ -1,2 +1,0 @@
-swig\globals.i(245) : Warning 453: Can't apply (char &INOUT). No typemaps are defined.
-C:\Librerias\Build\libs\OpenSceneGraph-3.2.1\include\osgDB\Options(165) : Warning 844: C# exception may not be thrown - no $excode or excode attribute in 'csout' typemap.

@@ -1,8 +1,0 @@
-swig\osgEarth-2.6\OsgEarthDrivers\OsgEarthDrivers.i(133) : Error: Unable to find 'osgEarthDrivers\engine_quadtree\QuadTreeTerrainEngineOptions'
-swig\osgEarth-2.6\OsgEarthDrivers\OsgEarthDrivers.i(143) : Error: Unable to find 'osgEarthDrivers\engine_osgterrain\OSGTerrainOptions'
-swig\osgEarth-2.6\OsgEarthDrivers\OsgEarthDrivers.i(153) : Error: Unable to find 'osgEarthDrivers\engine_seamless\SeamlessOptions'
-swig\osgEarth-2.6\OsgEarthDrivers\OsgEarthDrivers.i(163) : Error: Unable to find 'osgEarthDrivers\colorramp\ColorRampOptions'
-swig\osgEarth-2.6\osgEarthUtil\osgEarthUtil.i(149) : Error: Unable to find 'osgEarthUtil\NormalMap'
-swig\osgEarth-2.6\osgEarthUtil\osgEarthUtil.i(178) : Error: Unable to find 'osgEarthUtil\DetailTexture'
-swig\osgEarth-2.6\osgEarthUtil\osgEarthUtil.i(188) : Error: Unable to find 'osgEarthUtil\NormalMap'
-swig\osgEarth-2.6\osgEarthUtil\osgEarthUtil.i(195) : Error: Unable to find 'osgEarthUtil\TextureSplatter'
